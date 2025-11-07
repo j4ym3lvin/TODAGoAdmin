@@ -6,7 +6,7 @@ import PassengersPage from "./pages/PassengersPage";
 import ReportsPage from "./pages/ReportsPage";
 import TripsPage from "./pages/TripsPage";
 import ConfigPage from "./pages/ConfigPage";
-// ...other imports
+import LiveMonitorPage from "./pages/LiveMonitorPage";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/trips" element={<TripsPage />} />
         <Route path="/config" element={<ConfigPage />} />
-        {/* Other routes */}
+        <Route path="/monitor" element={<LiveMonitorPage />} />
       </Routes>
     </Router>
   );
