@@ -10,12 +10,28 @@ function EmptyState({ text }) {
   return <div style={{ padding: "16px 0", color: "#6b7280", fontSize: 14 }}>{text}</div>;
 }
 
+function getAdminName() {
+  try {
+    const raw = localStorage.getItem("tga_admin");
+    if (!raw) return "Admin";
+    const o = JSON.parse(raw);
+    return o?.name || "Admin";
+  } catch {
+    return "Admin";
+  }
+}
+
 export default function HomePage() {
   const [stats, setStats] = useState({ driverCount: 0, passengerCount: 0 });
   const [drivers, setDrivers] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [loading, setLoading] = useState({ stats: true, drivers: true, monthly: true });
   const [error, setError] = useState({ stats: "", drivers: "", monthly: "" });
+  const [adminName, setAdminName] = useState("Admin");
+
+  useEffect(() => {
+    setAdminName(getAdminName());
+  }, []);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -74,7 +90,15 @@ export default function HomePage() {
       <Navbar />
 
       <div className="dashboard-container" style={{ padding: 24, maxWidth: 1200, margin: "0 auto" }}>
-        <div className="dashboard-main" style={{ display: "grid", gap: 24 }}>
+          {/* PAGE HEADER BAR */}
+          <div className="page-bar">
+            <h1 className="page-title">Dashboard</h1>
+            <div className="welcome-admin">
+              Welcome,&nbsp;<b>{adminName}</b>
+            </div>
+          </div>
+
+          <div className="dashboard-main" style={{ display: "grid", gap: 24 }}>
 
           {/* Top Stats */}
           <div className="dashboard-stats" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
@@ -126,7 +150,17 @@ export default function HomePage() {
                 <Link to="/drivers" style={btnStyle}>VIEW ALL</Link>
               </div>
 
-              <div className="dashboard-table-header" style={{ marginTop: 16, display: "grid", gridTemplateColumns: "2fr 1.5fr 1.5fr 1fr 1fr", fontWeight: 600, color: "#6b7280", fontSize: 14 }}>
+              <div
+                className="dashboard-table-header"
+                style={{
+                  marginTop: 16,
+                  display: "grid",
+                  gridTemplateColumns: "2fr 1.5fr 1.5fr 1fr 1fr",
+                  fontWeight: 600,
+                  color: "#6b7280",
+                  fontSize: 14
+                }}
+              >
                 <span>NAME</span>
                 <span>REGISTRATION NO.</span>
                 <span>PLATE NO.</span>
@@ -139,20 +173,31 @@ export default function HomePage() {
                 {!loading.drivers && !drivers.length && <EmptyState text="No active drivers right now." />}
 
                 {!loading.drivers && drivers.map((d, i) => (
-                  <div key={i} style={{ display: "grid", gridTemplateColumns: "2fr 1.5fr 1.5fr 1fr 1fr", padding: "10px 0", borderTop: "1px solid #f1f5f9", fontSize: 14 }}>
+                  <div
+                    key={i}
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "2fr 1.5fr 1.5fr 1fr 1fr",
+                      padding: "10px 0",
+                      borderTop: "1px solid #f1f5f9",
+                      fontSize: 14
+                    }}
+                  >
                     <span title={d.driverName}>{d.driverName || `${d.firstName || ""} ${d.lastName || ""}`}</span>
                     <span>{d.franchiseNumber || d.registrationNo || "—"}</span>
                     <span>{d.plateNumber || d.plateNo || "—"}</span>
                     <span>{d.todaName || d.toda || "—"}</span>
                     <span>
-                      <span style={{
-                        padding: "2px 8px",
-                        borderRadius: 999,
-                        fontSize: 12,
-                        fontWeight: 600,
-                        background: (d.status || d.online) ? "#d1fae5" : "#e5e7eb",
-                        color: (d.status || d.online) ? "#065f46" : "#374151",
-                      }}>
+                      <span
+                        style={{
+                          padding: "2px 8px",
+                          borderRadius: 999,
+                          fontSize: 12,
+                          fontWeight: 600,
+                          background: (d.status || d.online) ? "#d1fae5" : "#e5e7eb",
+                          color: (d.status || d.online) ? "#065f46" : "#374151",
+                        }}
+                      >
                         {(d.status || (d.online ? "online" : "offline"))}
                       </span>
                     </span>
@@ -163,14 +208,24 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Reports (placeholder) */}
+            {/* Reports placeholder */}
             <div className="dashboard-card" style={cardStyle}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <b>REPORTS</b>
                 <Link to="/reports" style={btnStyle}>VIEW ALL</Link>
               </div>
 
-              <div className="dashboard-table-header" style={{ marginTop: 16, display: "grid", gridTemplateColumns: "2fr 2fr 1fr 1fr", fontWeight: 600, color: "#6b7280", fontSize: 14 }}>
+              <div
+                className="dashboard-table-header"
+                style={{
+                  marginTop: 16,
+                  display: "grid",
+                  gridTemplateColumns: "2fr 2fr 1fr 1fr",
+                  fontWeight: 600,
+                  color: "#6b7280",
+                  fontSize: 14
+                }}
+              >
                 <span>NAME</span>
                 <span>REPORT</span>
                 <span>DATE</span>

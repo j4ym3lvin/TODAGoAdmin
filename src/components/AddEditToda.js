@@ -181,7 +181,7 @@ useEffect(() => {
                 border: "1px solid #d1d5db",
                 borderRadius: 8,
                 maxWidth: 320,
-                width: "100%",
+                width: "70%",
               }}
             />
           </div>
